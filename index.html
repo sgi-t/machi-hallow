@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>まちハロ - まちだハロウィンフェス -</title>
+    <meta name="description" content="出会って、笑って、心地良い。Where Smiles Connect。10月25日(日)開催のまちだハロウィンフェス「まちハロ」公式サイト。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Allura&family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="is-loading">
+
+    <!-- Mouse glow effect -->
+    <div class="mouse-glow" id="mouse-glow"></div>
+
+    <!-- Halloween floating particles canvas -->
+    <canvas id="halloween-particles"></canvas>
+
+    <!-- ==================== OPENING ANIMATION ==================== -->
+    <div class="opening" id="opening">
+        <div class="opening__inner">
+            <p class="opening__ja" id="opening-ja">出会って、笑って、心地良い。</p>
+            <p class="opening__en" id="opening-en">Where Smiles Connect</p>
+        </div>
+    </div>
+
+    <!-- ==================== HEADER ==================== -->
+    <header class="header" id="header">
+        <div class="header__inner">
+            <a href="#" class="header__logo">
+                <img src="logo.svg" alt="まちハロ" class="header__logo-img">
+            </a>
+            <nav class="header__nav" id="header-nav">
+                <a href="#about" class="header__nav-link">About</a>
+                <a href="#info" class="header__nav-link">Info</a>
+                <a href="#faq" class="header__nav-link">FAQ</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3BJRNs7r-1VBXGcItKG9MGoy-5VTKKYv8E7tITdoLcZcURQ/viewform" target="_blank" rel="noopener noreferrer" class="header__nav-btn">参加フォーム</a>
+            </nav>
+            <button class="header__hamburger" id="hamburger" aria-label="メニューを開く">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== HERO / FIRST VIEW ==================== -->
+    <section class="hero" id="hero">
+        <div class="hero__visual">
+            <!-- Flyer illustration used as a background visual element -->
+            <div class="hero__illustration">
+                <img src="human.svg" alt="まちハロ イラスト" class="hero__illustration-img">
+            </div>
+        </div>
+
+        <div class="hero__content">
+            <div class="hero__title-area">
+                <h1 class="hero__title-main">まちハロ</h1>
+                <p class="hero__title-sub">- まちだハロウィンフェス -</p>
+            </div>
+            <p class="hero__catchcopy">出会って、笑って、心地良い。</p>
+            <p class="hero__catchcopy-en">Where Smiles Connect</p>
+
+            <div class="hero__countdown">
+                <span class="hero__cd-label">まちハロまであと</span>
+                <span class="hero__cd-number" id="cd-days">--</span>
+                <span class="hero__cd-unit">日</span>
+            </div>
+        </div>
+
+        <div class="hero__scroll-hint">
+            <span>Scroll</span>
+            <div class="hero__scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- ==================== ABOUT ==================== -->
+    <section class="section section--decorated about" id="about">
+        <div class="container">
+            <div class="section__header reveal">
+                <span class="section__label">About</span>
+                <h2 class="section__title">まちハロとは？</h2>
+            </div>
+            <div class="about__body reveal">
+                <p class="about__text">
+                    「まちハロ」は、町田で開催されるハロウィンフェスティバル。<br>
+                    ステージ、ワークショップ、フォトスポットなど、<br class="pc-only">
+                    大人も子どもも楽しめる企画が盛りだくさん！<br>
+                    ご家族やご友人と一緒に、ぜひお気軽にお越しください。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== EVENT INFO ==================== -->
+    <section class="section section--decorated info" id="info">
+        <div class="container">
+            <div class="section__header reveal">
+                <span class="section__label">Event Info</span>
+                <h2 class="section__title">開催概要</h2>
+            </div>
+            <div class="info__grid">
+                <div class="info__card reveal" style="--delay: 0s">
+                    <div class="info__card-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    </div>
+                    <h3 class="info__card-title">日時</h3>
+                    <p class="info__card-value">10月25日<span>(日)</span></p>
+                    <p class="info__card-desc">13:00 - 17:00 ／ 入退場自由</p>
+                </div>
+                <div class="info__card reveal" style="--delay: 0.15s">
+                    <div class="info__card-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    </div>
+                    <h3 class="info__card-title">場所</h3>
+                    <p class="info__card-value">創価学会<br>町田平和会館</p>
+                    <p class="info__card-desc">町田市木曽西4-35-45</p>
+                </div>
+                <div class="info__card reveal" style="--delay: 0.3s">
+                    <div class="info__card-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                    </div>
+                    <h3 class="info__card-title">参加</h3>
+                    <p class="info__card-value">無料</p>
+                    <p class="info__card-desc">どなたでもご参加いただけます</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FAQ ==================== -->
+    <section class="section section--decorated faq" id="faq">
+        <div class="container">
+            <div class="section__header reveal">
+                <span class="section__label">FAQ</span>
+                <h2 class="section__title">よくある質問</h2>
+            </div>
+            <div class="faq__list">
+                <details class="faq__item reveal" style="--delay: 0s">
+                    <summary class="faq__question">
+                        <span class="faq__q-icon">Q</span>
+                        <span>出入りは自由でしょうか?</span>
+                        <span class="faq__toggle"></span>
+                    </summary>
+                    <div class="faq__answer">
+                        <span class="faq__a-icon">A</span>
+                        <p>出入りは自由です。開催時間内(13:00-17:00)であれば、お好きな時間にご来場いただけます。</p>
+                    </div>
+                </details>
+                <details class="faq__item reveal" style="--delay: 0.1s">
+                    <summary class="faq__question">
+                        <span class="faq__q-icon">Q</span>
+                        <span>サンダルで行っても良いでしょうか?</span>
+                        <span class="faq__toggle"></span>
+                    </summary>
+                    <div class="faq__answer">
+                        <span class="faq__a-icon">A</span>
+                        <p>サンダルでのご来場も可能です。会場内では靴下の着用をお願いしておりますので、靴下をご持参ください。</p>
+                    </div>
+                </details>
+                <details class="faq__item reveal" style="--delay: 0.2s">
+                    <summary class="faq__question">
+                        <span class="faq__q-icon">Q</span>
+                        <span>駐車場はありますか？</span>
+                        <span class="faq__toggle"></span>
+                    </summary>
+                    <div class="faq__answer">
+                        <span class="faq__a-icon">A</span>
+                        <p>駐車場・駐輪場をご用意しておりますが、台数に限りがございます。満車の際は周辺のコインパーキングをご利用ください。</p>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FORM CTA ==================== -->
+    <section class="section form-cta" id="form">
+        <div class="container">
+            <div class="form-cta__box reveal">
+                <h2 class="form-cta__title">参加お申し込み</h2>
+                <p class="form-cta__desc">イベントへのご参加は、以下のフォームより事前にお申し込みください。<br>ご家族やお友達同士でのご参加も大歓迎です！</p>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3BJRNs7r-1VBXGcItKG9MGoy-5VTKKYv8E7tITdoLcZcURQ/viewform" target="_blank" rel="noopener noreferrer" class="btn-primary">
+                    参加フォームを開く
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer__inner">
+                <img src="logo.svg" alt="まちハロ" class="footer__logo">
+                <p class="footer__copy">&copy; 2026 まちハロ - まちだハロウィンフェス</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
