@@ -3,198 +3,325 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>まちハロ - まちだハロウィンフェス -</title>
-    <meta name="description" content="出会って、笑って、心地良い。Where Smiles Connect。10月25日(日)開催のまちだハロウィンフェス「まちハロ」公式サイト。">
+    <title>まちハロ - 町田ハロウィンフェス -</title>
+    <meta name="description" content="出会って、笑って、心地いい。Where smiles connect。10月25日(日)開催の町田ハロウィンフェス「まちハロ」公式サイト。">
+    <meta name="theme-color" content="#FAF7F2">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Allura&family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&family=Allura&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="is-loading">
 
-    <!-- Mouse glow effect -->
-    <div class="mouse-glow" id="mouse-glow"></div>
+    <!-- 暖色のにじみ（マウス追従。タッチ端末では非表示） -->
+    <div class="bleed" id="bleed" aria-hidden="true"></div>
 
-    <!-- Halloween floating particles canvas -->
-    <canvas id="halloween-particles"></canvas>
+    <!-- 手描きモチーフが舞う -->
+    <canvas id="drift" aria-hidden="true"></canvas>
 
-    <!-- ==================== OPENING ANIMATION ==================== -->
-    <div class="opening" id="opening">
+    <!-- ==================== OPENING ==================== -->
+    <div class="opening" id="opening" aria-hidden="true">
         <div class="opening__inner">
-            <p class="opening__ja" id="opening-ja">出会って、笑って、心地良い。</p>
-            <p class="opening__en" id="opening-en">Where Smiles Connect</p>
+            <p class="opening__ja" id="opening-ja">出会って、笑って、心地いい。</p>
+            <p class="opening__en" id="opening-en">Where smiles connect</p>
         </div>
     </div>
 
     <!-- ==================== HEADER ==================== -->
     <header class="header" id="header">
         <div class="header__inner">
-            <a href="#" class="header__logo">
-                <img src="logo.svg" alt="まちハロ" class="header__logo-img">
+            <a href="#hero" class="header__logo" aria-label="まちハロ トップへ">
+                <img src="logo.svg" alt="まちハロ" class="header__logo-img" width="1252" height="562">
             </a>
-            <nav class="header__nav" id="header-nav">
-                <a href="#about" class="header__nav-link">About</a>
-                <a href="#info" class="header__nav-link">Info</a>
-                <a href="#faq" class="header__nav-link">FAQ</a>
+
+            <nav class="header__nav" id="header-nav" aria-label="メインナビゲーション">
+                <a href="#about" class="header__nav-link">まちハロとは</a>
+                <a href="#info" class="header__nav-link">開催概要</a>
+                <a href="#faq" class="header__nav-link">よくある質問</a>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3BJRNs7r-1VBXGcItKG9MGoy-5VTKKYv8E7tITdoLcZcURQ/viewform" target="_blank" rel="noopener noreferrer" class="header__nav-btn">参加フォーム</a>
             </nav>
-            <button class="header__hamburger" id="hamburger" aria-label="メニューを開く">
+
+            <button class="hamburger" id="hamburger" aria-label="メニューを開く" aria-expanded="false" aria-controls="header-nav">
                 <span></span><span></span><span></span>
             </button>
         </div>
     </header>
 
-    <!-- ==================== HERO / FIRST VIEW ==================== -->
+    <!-- ==================== HERO ==================== -->
     <section class="hero" id="hero">
-        <div class="hero__visual">
-            <!-- Flyer illustration used as a background visual element -->
-            <div class="hero__illustration">
-                <img src="human.svg" alt="まちハロ イラスト" class="hero__illustration-img">
-            </div>
-        </div>
 
+        <!-- 有機的な色面 -->
+        <svg class="hero__blob hero__blob--top" viewBox="0 0 390 200" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 0 L390 0 L390 66 C330 96 300 52 244 74 C188 96 150 60 96 82 C58 98 26 84 0 100 Z" fill="#F8B838" opacity=".22"/>
+        </svg>
+        <svg class="hero__blob hero__blob--coral" viewBox="0 0 200 200" aria-hidden="true">
+            <path d="M104 8 C150 6 190 42 186 92 C182 142 142 176 96 170 C50 164 16 126 22 82 C28 38 58 10 104 8 Z" fill="#F8A888" opacity=".30"/>
+        </svg>
+        <svg class="hero__blob hero__blob--blue" viewBox="0 0 220 180" aria-hidden="true">
+            <path d="M112 6 C160 14 202 52 196 100 C190 148 144 174 98 168 C52 162 12 124 16 78 C20 32 64 -2 112 6 Z" fill="#88B8B8" opacity=".26"/>
+        </svg>
+
+        <!-- 旗ガーランド -->
+        <svg class="hero__bunting" viewBox="0 0 390 46" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 6 Q98 32 195 17 T390 8" stroke="#485838" stroke-width="1.4" fill="none"/>
+            <polygon points="24,11 42,14 32,32" fill="#F8A888"/>
+            <polygon points="62,17 80,20 70,38" fill="#88B8B8"/>
+            <polygon points="100,21 118,23 108,41" fill="#F8B838"/>
+            <polygon points="138,21 156,22 146,40" fill="#98A878"/>
+            <polygon points="176,18 194,18 184,36" fill="#F8A888"/>
+            <polygon points="214,15 232,15 222,33" fill="#88B8B8"/>
+            <polygon points="252,12 270,12 260,30" fill="#F8B838"/>
+            <polygon points="290,10 308,10 298,28" fill="#98A878"/>
+            <polygon points="328,9 346,8 336,26" fill="#F8A888"/>
+        </svg>
+
+        <!-- 月・コウモリ・星 -->
+        <svg class="deco deco--moon" viewBox="0 0 34 34" aria-hidden="true">
+            <path d="M27.23 26.56 A14 14 0 1 1 20.64 3.48 A12 12 0 0 0 27.23 26.56 Z" fill="#F8B838"/>
+        </svg>
+        <svg class="deco deco--bat1" viewBox="0 0 44 20" aria-hidden="true">
+            <path d="M22 6 L26 2 L27 8 L34 3 L32 11 L40 9 L30 17 L22 12 L14 17 L4 9 L12 11 L10 3 L17 8 L18 2 Z" fill="#485838"/>
+        </svg>
+        <svg class="deco deco--bat2" viewBox="0 0 44 20" aria-hidden="true">
+            <path d="M22 6 L26 2 L27 8 L34 3 L32 11 L40 9 L30 17 L22 12 L14 17 L4 9 L12 11 L10 3 L17 8 L18 2 Z" fill="#485838"/>
+        </svg>
+        <svg class="deco deco--star1" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0 Z" fill="#F8B838"/></svg>
+        <svg class="deco deco--star2" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0 Z" fill="#F8A888"/></svg>
+        <svg class="deco deco--star3" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 0 C11 7 13 9 20 10 C13 11 11 13 10 20 C9 13 7 11 0 10 C7 9 9 7 10 0 Z" fill="#88B8B8"/></svg>
+
+        <!-- 中央のコンテンツ -->
         <div class="hero__content">
-            <div class="hero__title-area">
-                <h1 class="hero__title-main">まちハロ</h1>
-                <p class="hero__title-sub">- まちだハロウィンフェス -</p>
-            </div>
-            <p class="hero__catchcopy">出会って、笑って、心地良い。</p>
-            <p class="hero__catchcopy-en">Where Smiles Connect</p>
+            <h1 class="hero__logo">
+                <img src="logo.svg" alt="まちハロ" width="1252" height="562">
+            </h1>
+            <p class="hero__sub"><span class="rule"></span>町田<em>ハロウィン</em>フェス<span class="rule"></span></p>
 
-            <div class="hero__countdown">
-                <span class="hero__cd-label">まちハロまであと</span>
-                <span class="hero__cd-number" id="cd-days">--</span>
-                <span class="hero__cd-unit">日</span>
+            <p class="hero__copy">出会って、笑って、心地いい。</p>
+            <p class="hero__copy-en">
+                <svg class="sprig sprig--l" viewBox="0 0 16 18" aria-hidden="true"><path d="M8 17 L8 5 M8 11 C5 11 3 9 3 6 C6 6 8 8 8 11 Z M8 9 C11 9 13 7 13 4 C10 4 8 6 8 9 Z" stroke="#98A878" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg>
+                <span>Where smiles connect</span>
+                <svg class="sprig sprig--r" viewBox="0 0 16 18" aria-hidden="true"><path d="M8 17 L8 5 M8 11 C11 11 13 9 13 6 C10 6 8 8 8 11 Z M8 9 C5 9 3 7 3 4 C6 4 8 6 8 9 Z" stroke="#98A878" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg>
+            </p>
+
+            <!-- スカラップの日付バッジ -->
+            <div class="datebadge">
+                <svg viewBox="0 0 150 150" role="img" aria-label="10月25日 日曜日">
+                    <g fill="#F8A888">
+                        <circle cx="75" cy="75" r="58"/>
+                        <circle cx="133.0" cy="75.0" r="11"/><circle cx="128.6" cy="97.2" r="11"/>
+                        <circle cx="116.0" cy="116.0" r="11"/><circle cx="97.2" cy="128.6" r="11"/>
+                        <circle cx="75.0" cy="133.0" r="11"/><circle cx="52.8" cy="128.6" r="11"/>
+                        <circle cx="34.0" cy="116.0" r="11"/><circle cx="21.4" cy="97.2" r="11"/>
+                        <circle cx="17.0" cy="75.0" r="11"/><circle cx="21.4" cy="52.8" r="11"/>
+                        <circle cx="34.0" cy="34.0" r="11"/><circle cx="52.8" cy="21.4" r="11"/>
+                        <circle cx="75.0" cy="17.0" r="11"/><circle cx="97.2" cy="21.4" r="11"/>
+                        <circle cx="116.0" cy="34.0" r="11"/><circle cx="128.6" cy="52.8" r="11"/>
+                    </g>
+                    <text x="75" y="52" text-anchor="middle" class="db-m">10月</text>
+                    <text x="75" y="96" text-anchor="middle" class="db-d">25</text>
+                    <text x="75" y="118" text-anchor="middle" class="db-w">日曜日</text>
+                </svg>
             </div>
+
+            <p class="countdown">
+                <span>まちハロまであと</span>
+                <strong id="cd-days">--</strong>
+                <span>日</span>
+            </p>
         </div>
 
-        <div class="hero__scroll-hint">
-            <span>Scroll</span>
-            <div class="hero__scroll-line"></div>
-        </div>
+        <!-- 足元のシーン -->
+        <svg class="scene scene--tree" viewBox="0 0 100 150" aria-hidden="true">
+            <path d="M50 150 L50 56" stroke="#B49A76" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+            <path d="M50 104 L26 78 M50 90 L74 66 M50 74 L34 54 M50 64 L64 46" stroke="#B49A76" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+            <ellipse cx="24" cy="74" rx="8" ry="5.5" fill="#98A878" transform="rotate(-34 24 74)"/>
+            <ellipse cx="76" cy="62" rx="8" ry="5.5" fill="#F8B838" transform="rotate(28 76 62)"/>
+            <ellipse cx="32" cy="50" rx="7.5" ry="5" fill="#486848" transform="rotate(-42 32 50)"/>
+            <ellipse cx="66" cy="42" rx="7.5" ry="5" fill="#F8A888" transform="rotate(34 66 42)"/>
+            <ellipse cx="50" cy="34" rx="8" ry="5.5" fill="#98A878" transform="rotate(-8 50 34)"/>
+            <ellipse cx="40" cy="64" rx="6.5" ry="4.5" fill="#F8B838" transform="rotate(-20 40 64)"/>
+            <ellipse cx="62" cy="80" rx="6.5" ry="4.5" fill="#486848" transform="rotate(22 62 80)"/>
+        </svg>
+        <svg class="scene scene--tent" viewBox="0 0 100 80" aria-hidden="true">
+            <path d="M50 10 L92 72 L8 72 Z" fill="#88B8B8"/>
+            <path d="M50 10 L50 72" stroke="#FAF7F2" stroke-width="2.4"/>
+            <path d="M50 36 L66 72 L34 72 Z" fill="#FAF7F2"/>
+            <path d="M50 10 L50 3" stroke="#485838" stroke-width="2" stroke-linecap="round"/>
+            <path d="M50 3 L63 6 L50 9 Z" fill="#F8B838"/>
+        </svg>
+        <svg class="scene scene--pumpkin" viewBox="0 0 46 40" aria-hidden="true">
+            <ellipse cx="23" cy="24" rx="19" ry="14" fill="#EE9046"/>
+            <ellipse cx="23" cy="24" rx="7" ry="14" fill="#E07F35" opacity=".45"/>
+            <path d="M23 10 v-6" stroke="#486848" stroke-width="2.6" stroke-linecap="round"/>
+            <path d="M15 20 l5 5 -9 0 Z" fill="#3A4A2E"/>
+            <path d="M31 20 l5 5 -9 0 Z" fill="#3A4A2E"/>
+            <path d="M15 30 q8 5 16 0 q-8 2 -16 0 Z" fill="#3A4A2E"/>
+        </svg>
+        <svg class="scene scene--bird" viewBox="0 0 30 20" aria-hidden="true">
+            <path d="M4 14 c0-5 4-8 9-8 c3 0 5 1 7 3 l6-2 -3 4 c1 4 -2 7 -7 7 c-6 0 -12 -1 -12 -4 Z" fill="#FDFBF7" stroke="#88B8B8" stroke-width="1.1"/>
+            <circle cx="18" cy="10" r="1.1" fill="#485838"/>
+        </svg>
+        <svg class="ground" viewBox="0 0 390 60" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 34 C58 18 92 40 154 30 C216 20 254 42 316 32 C348 27 372 34 390 28 L390 60 L0 60 Z" fill="#98A878" opacity=".30"/>
+        </svg>
     </section>
+
+    <!-- ==================== 人物イラストの帯 ==================== -->
+    <div class="people">
+        <svg class="people__edge" viewBox="0 0 390 30" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 30 C56 4 108 26 168 14 C228 2 276 24 330 16 C356 12 374 18 390 12 L390 0 L0 0 Z" fill="#FAF7F2"/>
+        </svg>
+        <div class="people__inner">
+            <svg class="people__ground" viewBox="0 0 390 60" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M0 26 C58 10 92 32 154 22 C216 12 254 34 316 24 C348 19 372 27 390 21 L390 60 L0 60 Z" fill="#98A878" opacity=".30"/>
+            </svg>
+            <img class="people__img"
+                 src="assets/people-1100.webp"
+                 srcset="assets/people-560.webp 560w, assets/people-760.webp 760w, assets/people-1100.webp 1100w"
+                 sizes="(min-width: 1024px) 860px, 100vw"
+                 alt="まちハロに集まる人たち" width="1717" height="698">
+        </div>
+    </div>
 
     <!-- ==================== ABOUT ==================== -->
-    <section class="section section--decorated about" id="about">
-        <div class="container">
-            <div class="section__header reveal">
-                <span class="section__label">About</span>
-                <h2 class="section__title">まちハロとは？</h2>
-            </div>
-            <div class="about__body reveal">
-                <p class="about__text">
-                    「まちハロ」は、町田で開催されるハロウィンフェスティバル。<br>
-                    ステージ、ワークショップ、フォトスポットなど、<br class="pc-only">
-                    大人も子どもも楽しめる企画が盛りだくさん！<br>
-                    ご家族やご友人と一緒に、ぜひお気軽にお越しください。
-                </p>
+    <section class="section about" id="about">
+        <div class="wrap wrap--narrow">
+            <svg class="tie" viewBox="0 0 330 26" aria-hidden="true">
+                <path d="M8 24 L165 4 L322 24" stroke="#98A878" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+                <circle cx="165" cy="4" r="3.4" fill="#C2603A"/>
+            </svg>
+            <div class="fuda reveal">
+                <div class="fuda__in fuda__in--center">
+                    <p class="eyebrow"><i></i>ABOUT<i></i></p>
+                    <h2 class="sec-title">まちハロとは？</h2>
+                    <p class="about__text">
+                        「まちハロ」は、町田で開催されるハロウィンフェスティバル。ステージ、ワークショップ、フォトスポットなど、大人も子どもも楽しめる企画が盛りだくさん！ご家族やご友人と一緒に、ぜひお気軽にお越しください。
+                    </p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- ==================== EVENT INFO ==================== -->
-    <section class="section section--decorated info" id="info">
-        <div class="container">
-            <div class="section__header reveal">
-                <span class="section__label">Event Info</span>
-                <h2 class="section__title">開催概要</h2>
+    <!-- ==================== 開催概要 ==================== -->
+    <section class="section info" id="info">
+        <svg class="edge" viewBox="0 0 390 30" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 30 C60 8 116 28 176 16 C236 4 284 26 336 18 C360 14 376 20 390 14 L390 0 L0 0 Z" fill="#FAF7F2"/>
+        </svg>
+        <div class="wrap">
+            <div class="sec-head reveal">
+                <p class="eyebrow"><i></i>EVENT INFO<i></i></p>
+                <h2 class="sec-title">開催概要</h2>
             </div>
-            <div class="info__grid">
-                <div class="info__card reveal" style="--delay: 0s">
-                    <div class="info__card-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+
+            <ul class="info__list">
+                <li class="fuda fuda--tilt-a reveal" style="--delay:0s">
+                    <div class="fuda__in fuda__in--row">
+                        <svg class="ico" viewBox="0 0 38 38" aria-hidden="true">
+                            <rect x="4" y="7" width="30" height="27" rx="5" fill="none" stroke="#486848" stroke-width="1.8"/>
+                            <path d="M4 15 H34" stroke="#486848" stroke-width="1.8"/>
+                            <path d="M12 3 V9 M26 3 V9" stroke="#486848" stroke-width="1.8" stroke-linecap="round"/>
+                            <circle cx="19" cy="24" r="4" fill="#F8A888"/>
+                        </svg>
+                        <div>
+                            <p class="info__label">日時</p>
+                            <p class="info__value">10月25日<small>(日)</small></p>
+                            <p class="info__note">13:00 - 17:00 ／ 入退場自由</p>
+                        </div>
                     </div>
-                    <h3 class="info__card-title">日時</h3>
-                    <p class="info__card-value">10月25日<span>(日)</span></p>
-                    <p class="info__card-desc">13:00 - 17:00 ／ 入退場自由</p>
-                </div>
-                <div class="info__card reveal" style="--delay: 0.15s">
-                    <div class="info__card-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                </li>
+                <li class="fuda fuda--tilt-b reveal" style="--delay:.1s">
+                    <div class="fuda__in fuda__in--row">
+                        <svg class="ico" viewBox="0 0 38 38" aria-hidden="true">
+                            <path d="M19 34 C19 34 7 24 7 15 A12 12 0 0 1 31 15 C31 24 19 34 19 34 Z" fill="none" stroke="#486848" stroke-width="1.8"/>
+                            <circle cx="19" cy="15" r="4.4" fill="#88B8B8"/>
+                        </svg>
+                        <div>
+                            <p class="info__label">会場</p>
+                            <p class="info__value">町田平和会館</p>
+                            <p class="info__note">町田市木曽西4-35-45</p>
+                        </div>
                     </div>
-                    <h3 class="info__card-title">場所</h3>
-                    <p class="info__card-value">創価学会<br>町田平和会館</p>
-                    <p class="info__card-desc">町田市木曽西4-35-45</p>
-                </div>
-                <div class="info__card reveal" style="--delay: 0.3s">
-                    <div class="info__card-icon">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                </li>
+                <li class="fuda fuda--tilt-c reveal" style="--delay:.2s">
+                    <div class="fuda__in fuda__in--row">
+                        <svg class="ico" viewBox="0 0 38 38" aria-hidden="true">
+                            <circle cx="14" cy="13" r="6" fill="none" stroke="#486848" stroke-width="1.8"/>
+                            <path d="M4 31 a10 10 0 0 1 20 0" fill="none" stroke="#486848" stroke-width="1.8" stroke-linecap="round"/>
+                            <circle cx="27" cy="16" r="4.4" fill="#F8B838"/>
+                            <path d="M21 31 a7 7 0 0 1 12-5" fill="none" stroke="#486848" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                        <div>
+                            <p class="info__label">参加</p>
+                            <p class="info__value">無料</p>
+                            <p class="info__note">どなたでもご参加いただけます</p>
+                        </div>
                     </div>
-                    <h3 class="info__card-title">参加</h3>
-                    <p class="info__card-value">無料</p>
-                    <p class="info__card-desc">どなたでもご参加いただけます</p>
-                </div>
-            </div>
+                </li>
+            </ul>
         </div>
     </section>
 
     <!-- ==================== FAQ ==================== -->
-    <section class="section section--decorated faq" id="faq">
-        <div class="container">
-            <div class="section__header reveal">
-                <span class="section__label">FAQ</span>
-                <h2 class="section__title">よくある質問</h2>
+    <section class="section faq" id="faq">
+        <div class="wrap wrap--narrow">
+            <div class="sec-head reveal">
+                <p class="eyebrow"><i></i>FAQ<i></i></p>
+                <h2 class="sec-title">よくある質問</h2>
             </div>
+
             <div class="faq__list">
-                <details class="faq__item reveal" style="--delay: 0s">
-                    <summary class="faq__question">
-                        <span class="faq__q-icon">Q</span>
-                        <span>出入りは自由でしょうか?</span>
-                        <span class="faq__toggle"></span>
+                <details class="fuda reveal" style="--delay:0s">
+                    <summary class="fuda__in fuda__in--q">
+                        <span class="q">Q</span>
+                        <span class="faq__text">出入りは自由でしょうか?</span>
+                        <svg class="chev" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 5 L7 9.5 L11.5 5" stroke="#98A878" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
                     </summary>
-                    <div class="faq__answer">
-                        <span class="faq__a-icon">A</span>
-                        <p>出入りは自由です。開催時間内(13:00-17:00)であれば、お好きな時間にご来場いただけます。</p>
-                    </div>
+                    <div class="faq__answer"><span class="a">A</span><p>出入りは自由です。開催時間内(13:00-17:00)であれば、お好きな時間にご来場いただけます。</p></div>
                 </details>
-                <details class="faq__item reveal" style="--delay: 0.1s">
-                    <summary class="faq__question">
-                        <span class="faq__q-icon">Q</span>
-                        <span>サンダルで行っても良いでしょうか?</span>
-                        <span class="faq__toggle"></span>
+
+                <details class="fuda reveal" style="--delay:.1s">
+                    <summary class="fuda__in fuda__in--q">
+                        <span class="q">Q</span>
+                        <span class="faq__text">サンダルで行っても良いでしょうか?</span>
+                        <svg class="chev" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 5 L7 9.5 L11.5 5" stroke="#98A878" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
                     </summary>
-                    <div class="faq__answer">
-                        <span class="faq__a-icon">A</span>
-                        <p>サンダルでのご来場も可能です。会場内では靴下の着用をお願いしておりますので、靴下をご持参ください。</p>
-                    </div>
+                    <div class="faq__answer"><span class="a">A</span><p>サンダルでのご来場も可能です。会場内では靴下の着用をお願いしておりますので、靴下をご持参ください。</p></div>
                 </details>
-                <details class="faq__item reveal" style="--delay: 0.2s">
-                    <summary class="faq__question">
-                        <span class="faq__q-icon">Q</span>
-                        <span>駐車場はありますか？</span>
-                        <span class="faq__toggle"></span>
+
+                <details class="fuda reveal" style="--delay:.2s">
+                    <summary class="fuda__in fuda__in--q">
+                        <span class="q">Q</span>
+                        <span class="faq__text">駐車場はありますか？</span>
+                        <svg class="chev" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 5 L7 9.5 L11.5 5" stroke="#98A878" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
                     </summary>
-                    <div class="faq__answer">
-                        <span class="faq__a-icon">A</span>
-                        <p>駐車場・駐輪場をご用意しておりますが、台数に限りがございます。満車の際は周辺のコインパーキングをご利用ください。</p>
-                    </div>
+                    <div class="faq__answer"><span class="a">A</span><p>駐車場・駐輪場をご用意しておりますが、台数に限りがございます。満車の際は周辺のコインパーキングをご利用ください。</p></div>
                 </details>
             </div>
         </div>
     </section>
 
-    <!-- ==================== FORM CTA ==================== -->
-    <section class="section form-cta" id="form">
-        <div class="container">
-            <div class="form-cta__box reveal">
-                <h2 class="form-cta__title">参加お申し込み</h2>
-                <p class="form-cta__desc">イベントへのご参加は、以下のフォームより事前にお申し込みください。<br>ご家族やお友達同士でのご参加も大歓迎です！</p>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3BJRNs7r-1VBXGcItKG9MGoy-5VTKKYv8E7tITdoLcZcURQ/viewform" target="_blank" rel="noopener noreferrer" class="btn-primary">
-                    参加フォームを開く
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </a>
-            </div>
+    <!-- ==================== CTA ==================== -->
+    <section class="cta" id="form">
+        <svg class="edge" viewBox="0 0 390 30" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 30 C58 6 110 26 170 15 C230 4 280 24 334 17 C358 14 376 19 390 13 L390 0 L0 0 Z" fill="#FAF7F2"/>
+        </svg>
+        <svg class="deco deco--moon-cta" viewBox="0 0 34 34" aria-hidden="true">
+            <path d="M27.23 26.56 A14 14 0 1 1 20.64 3.48 A12 12 0 0 0 27.23 26.56 Z" fill="#F8B838" opacity=".85"/>
+        </svg>
+        <div class="wrap wrap--narrow cta__inner reveal">
+            <h2 class="cta__title">お気軽にお越しください</h2>
+            <p class="cta__text">入退場は自由、参加費もかかりません。<br>人数の目安を知りたいので、事前にご連絡いただけると助かります。</p>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3BJRNs7r-1VBXGcItKG9MGoy-5VTKKYv8E7tITdoLcZcURQ/viewform" target="_blank" rel="noopener noreferrer" class="btn">
+                参加フォームを開く
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
         </div>
     </section>
 
     <!-- ==================== FOOTER ==================== -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer__inner">
-                <img src="logo.svg" alt="まちハロ" class="footer__logo">
-                <p class="footer__copy">&copy; 2026 まちハロ - まちだハロウィンフェス</p>
-            </div>
-        </div>
+        <img src="logo.svg" alt="まちハロ" class="footer__logo" width="1252" height="562">
+        <p class="footer__copy">&copy; 2026 まちハロ - 町田ハロウィンフェス</p>
     </footer>
 
     <script src="script.js"></script>

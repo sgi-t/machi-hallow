@@ -1,280 +1,284 @@
-document.addEventListener('DOMContentLoaded', () => {
+/* ============================================================
+   まちハロ - 町田ハロウィンフェス
+   ============================================================ */
+(function () {
+    'use strict';
 
-    /* ==========================================
-       1. OPENING ANIMATION
-       ========================================== */
-    const opening = document.getElementById('opening');
-    const openingJa = document.getElementById('opening-ja');
-    const openingEn = document.getElementById('opening-en');
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Phase 1: Show Japanese text
-    setTimeout(() => {
-        openingJa.classList.add('is-active');
-    }, 300);
+    /* --------------------------------------------------------
+       オープニング
+       -------------------------------------------------------- */
+    (function opening() {
+        var el = document.getElementById('opening');
+        var ja = document.getElementById('opening-ja');
+        var en = document.getElementById('opening-en');
+        if (!el) return;
 
-    // Phase 2: Show English text
-    setTimeout(() => {
-        openingEn.classList.add('is-active');
-    }, 300);
-
-    // Phase 3: Fade out the entire opening overlay
-    setTimeout(() => {
-        opening.classList.add('is-done');
-        document.body.classList.remove('is-loading');
-    }, 3000);
-
-    /* ==========================================
-       2. HEADER SCROLL EFFECT
-       ========================================== */
-    const header = document.getElementById('header');
-    const onScroll = () => {
-        if (window.scrollY > 60) {
-            header.classList.add('is-scrolled');
-        } else {
-            header.classList.remove('is-scrolled');
+        function finish() {
+            el.classList.add('is-done');
+            document.body.classList.remove('is-loading');
         }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
 
-    /* ==========================================
-       3. HAMBURGER MENU
-       ========================================== */
-    const hamburger = document.getElementById('hamburger');
-    const headerNav = document.getElementById('header-nav');
+        if (reduceMotion) { finish(); return; }
 
-    if (hamburger && headerNav) {
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('is-open');
-            headerNav.classList.toggle('is-open');
+        // 日本語 → 英字の順に現れる。時差は CSS の transition-delay 側で持たせる。
+        requestAnimationFrame(function () {
+            if (ja) ja.classList.add('is-active');
+            if (en) en.classList.add('is-active');
         });
+        setTimeout(finish, 2600);
+    })();
 
-        // Close menu when a link is clicked
-        headerNav.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('is-open');
-                headerNav.classList.remove('is-open');
-            });
+    /* --------------------------------------------------------
+       カウントダウン（開催日までの日数）
+       -------------------------------------------------------- */
+    (function countdown() {
+        var out = document.getElementById('cd-days');
+        if (!out) return;
+
+        var EVENT_MONTH = 9;   // 0-indexed: 9 = 10月
+        var EVENT_DATE = 25;
+
+        var now = new Date();
+        var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var target = new Date(now.getFullYear(), EVENT_MONTH, EVENT_DATE);
+        if (target < today) target = new Date(now.getFullYear() + 1, EVENT_MONTH, EVENT_DATE);
+
+        var days = Math.round((target - today) / 86400000);
+
+        if (reduceMotion || days === 0) { out.textContent = String(days); return; }
+
+        // 0 から数え上げる
+        var shown = 0;
+        var step = Math.max(1, Math.round(days / 40));
+        var timer = setInterval(function () {
+            shown += step;
+            if (shown >= days) { shown = days; clearInterval(timer); }
+            out.textContent = String(shown);
+        }, 32);
+    })();
+
+    /* --------------------------------------------------------
+       ヘッダー（スクロール状態）
+       -------------------------------------------------------- */
+    (function header() {
+        var el = document.getElementById('header');
+        if (!el) return;
+        var ticking = false;
+        function update() {
+            el.classList.toggle('is-scrolled', window.scrollY > 60);
+            ticking = false;
+        }
+        window.addEventListener('scroll', function () {
+            if (!ticking) { ticking = true; requestAnimationFrame(update); }
+        }, { passive: true });
+        update();
+    })();
+
+    /* --------------------------------------------------------
+       ハンバーガー / ドロワー
+       -------------------------------------------------------- */
+    (function drawer() {
+        var btn = document.getElementById('hamburger');
+        var nav = document.getElementById('header-nav');
+        if (!btn || !nav) return;
+
+        function setOpen(open) {
+            btn.classList.toggle('is-open', open);
+            nav.classList.toggle('is-open', open);
+            btn.setAttribute('aria-expanded', String(open));
+            btn.setAttribute('aria-label', open ? 'メニューを閉じる' : 'メニューを開く');
+        }
+
+        btn.addEventListener('click', function () {
+            setOpen(!nav.classList.contains('is-open'));
         });
-    }
+        nav.addEventListener('click', function (e) {
+            if (e.target.closest('a')) setOpen(false);
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+                setOpen(false);
+                btn.focus();
+            }
+        });
+    })();
 
-    /* ==========================================
-       4. COUNTDOWN (日単位, 10月25日基準)
-       ========================================== */
-    const cdElement = document.getElementById('cd-days');
-    if (cdElement) {
-        const now = new Date();
-        const eventDate = new Date(now.getFullYear(), 9, 25); // October 25
+    /* --------------------------------------------------------
+       スクロールに合わせて要素が現れる
+       -------------------------------------------------------- */
+    (function reveal() {
+        var items = document.querySelectorAll('.reveal');
+        if (!items.length) return;
 
-        // If past the event date this year, use next year
-        if (now > eventDate) {
-            eventDate.setFullYear(eventDate.getFullYear() + 1);
+        if (reduceMotion || !('IntersectionObserver' in window)) {
+            items.forEach(function (el) { el.classList.add('is-visible'); });
+            return;
         }
 
-        const diffMs = eventDate.getTime() - now.getTime();
-        const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-
-        if (diffDays === 0) {
-            cdElement.textContent = '本日!';
-            cdElement.style.fontSize = '2.5rem';
-            const unit = document.querySelector('.hero__cd-unit');
-            if (unit) unit.style.display = 'none';
-        } else {
-            // Animate the count up
-            let current = 0;
-            const step = Math.max(Math.floor(1500 / diffDays), 15);
-            const counter = setInterval(() => {
-                current++;
-                cdElement.textContent = current;
-                if (current >= diffDays) {
-                    clearInterval(counter);
-                    cdElement.textContent = diffDays;
-                }
-            }, step);
-        }
-    }
-
-    /* ==========================================
-       5. SCROLL REVEAL (Intersection Observer)
-       ========================================== */
-    const revealElements = document.querySelectorAll('.reveal');
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
                 entry.target.classList.add('is-visible');
-                revealObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.15,
-        rootMargin: '0px 0px -40px 0px'
-    });
+                io.unobserve(entry.target);
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px' });
 
-    revealElements.forEach(el => revealObserver.observe(el));
+        items.forEach(function (el) { io.observe(el); });
+    })();
 
-    /* ==========================================
-       6. SMOOTH SCROLL for anchor links
-       ========================================== */
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                e.preventDefault();
-                const headerHeight = header.offsetHeight;
-                const targetPos = target.getBoundingClientRect().top + window.scrollY - headerHeight;
-                window.scrollTo({ top: targetPos, behavior: 'smooth' });
-            }
-        });
-    });
+    /* --------------------------------------------------------
+       暖色のにじみ（マウス追従。光らせない）
+       -------------------------------------------------------- */
+    (function bleed() {
+        var el = document.getElementById('bleed');
+        if (!el || reduceMotion) return;
+        if (!window.matchMedia('(hover: hover)').matches) return;
 
-    /* ==========================================
-       7. MOUSE GLOW EFFECT
-       ========================================== */
-    const mouseGlow = document.getElementById('mouse-glow');
-    if (mouseGlow) {
-        let mouseX = 0, mouseY = 0;
-        let glowX = 0, glowY = 0;
+        var tx = window.innerWidth / 2, ty = window.innerHeight / 2;
+        var x = tx, y = ty;
 
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
+        window.addEventListener('mousemove', function (e) {
+            tx = e.clientX; ty = e.clientY;
+        }, { passive: true });
 
-        function animateGlow() {
-            glowX += (mouseX - glowX) * 0.08;
-            glowY += (mouseY - glowY) * 0.08;
-            mouseGlow.style.left = glowX + 'px';
-            mouseGlow.style.top = glowY + 'px';
-            requestAnimationFrame(animateGlow);
+        (function loop() {
+            x += (tx - x) * 0.06;
+            y += (ty - y) * 0.06;
+            el.style.transform = 'translate(' + (x - 170) + 'px,' + (y - 170) + 'px)';
+            requestAnimationFrame(loop);
+        })();
+    })();
+
+    /* --------------------------------------------------------
+       手描きモチーフが舞う（落ち葉・星・小鳥・コウモリ）
+       絵文字ではなくパスで描くので、色をパレットに揃えられる。
+       -------------------------------------------------------- */
+    (function drift() {
+        var canvas = document.getElementById('drift');
+        if (!canvas || reduceMotion) return;
+
+        var ctx = canvas.getContext('2d');
+        var dpr = Math.min(window.devicePixelRatio || 1, 2);
+        var W = 0, H = 0;
+        var items = [];
+
+        var SHAPES = [
+            { kind: 'leaf', colors: ['#F8B838', '#EE9046', '#98A878'] },
+            { kind: 'leaf', colors: ['#F8B838', '#C2603A', '#486848'] },
+            { kind: 'star', colors: ['#F8B838', '#F8A888', '#88B8B8'] },
+            { kind: 'bird', colors: ['#88B8B8'] },
+            { kind: 'bat',  colors: ['#485838'] }
+        ];
+
+        function resize() {
+            W = window.innerWidth;
+            H = window.innerHeight;
+            canvas.width = Math.floor(W * dpr);
+            canvas.height = Math.floor(H * dpr);
+            canvas.style.width = W + 'px';
+            canvas.style.height = H + 'px';
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
-        animateGlow();
 
-        // Hide glow on mobile
-        if ('ontouchstart' in window) {
-            mouseGlow.style.display = 'none';
+        function make(seedTop) {
+            var s = SHAPES[Math.floor(Math.random() * SHAPES.length)];
+            return {
+                kind: s.kind,
+                color: s.colors[Math.floor(Math.random() * s.colors.length)],
+                x: Math.random() * W,
+                y: seedTop ? -30 - Math.random() * H : Math.random() * H,
+                size: 8 + Math.random() * 10,
+                vy: 0.14 + Math.random() * 0.30,
+                drift: 0.25 + Math.random() * 0.55,
+                phase: Math.random() * Math.PI * 2,
+                spin: (Math.random() - 0.5) * 0.012,
+                rot: Math.random() * Math.PI * 2,
+                alpha: 0.16 + Math.random() * 0.18
+            };
         }
-    }
 
-    /* ==========================================
-       8. HALLOWEEN PARTICLES (Canvas)
-       ========================================== */
-    const canvas = document.getElementById('halloween-particles');
-    if (canvas) {
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let animFrame;
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+        function drawLeaf(c, s) {
+            c.beginPath();
+            c.moveTo(0, -s);
+            c.bezierCurveTo(s * 0.85, -s * 0.35, s * 0.85, s * 0.5, 0, s);
+            c.bezierCurveTo(-s * 0.85, s * 0.5, -s * 0.85, -s * 0.35, 0, -s);
+            c.fill();
         }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+        function drawStar(c, s) {
+            c.beginPath();
+            c.moveTo(0, -s);
+            c.bezierCurveTo(s * 0.14, -s * 0.28, s * 0.28, -s * 0.14, s, 0);
+            c.bezierCurveTo(s * 0.28, s * 0.14, s * 0.14, s * 0.28, 0, s);
+            c.bezierCurveTo(-s * 0.14, s * 0.28, -s * 0.28, s * 0.14, -s, 0);
+            c.bezierCurveTo(-s * 0.28, -s * 0.14, -s * 0.14, -s * 0.28, 0, -s);
+            c.fill();
+        }
+        function drawBird(c, s) {
+            c.lineWidth = Math.max(1, s * 0.14);
+            c.lineCap = 'round';
+            c.beginPath();
+            c.moveTo(-s, 0);
+            c.quadraticCurveTo(-s * 0.5, -s * 0.62, 0, 0);
+            c.quadraticCurveTo(s * 0.5, -s * 0.62, s, 0);
+            c.stroke();
+        }
+        function drawBat(c, s) {
+            c.beginPath();
+            c.moveTo(0, -s * 0.2);
+            c.lineTo(s * 0.22, -s * 0.55); c.lineTo(s * 0.3, -s * 0.1);
+            c.lineTo(s * 0.62, -s * 0.45); c.lineTo(s * 0.55, s * 0.05);
+            c.lineTo(s, -s * 0.05); c.lineTo(s * 0.45, s * 0.42);
+            c.lineTo(0, s * 0.16);
+            c.lineTo(-s * 0.45, s * 0.42); c.lineTo(-s, -s * 0.05);
+            c.lineTo(-s * 0.55, s * 0.05); c.lineTo(-s * 0.62, -s * 0.45);
+            c.lineTo(-s * 0.3, -s * 0.1); c.lineTo(-s * 0.22, -s * 0.55);
+            c.closePath();
+            c.fill();
+        }
 
-        // Halloween symbols to float
-        const symbols = ['🎃', '🦇', '👻', '🕸️', '⭐', '✨', '🌙'];
+        function frame() {
+            ctx.clearRect(0, 0, W, H);
+            for (var i = 0; i < items.length; i++) {
+                var p = items[i];
+                p.y += p.vy;
+                p.phase += 0.006;
+                p.rot += p.spin;
+                var x = p.x + Math.sin(p.phase) * p.drift * 26;
 
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 16 + 10;
-                this.speedY = -(Math.random() * 0.3 + 0.1);
-                this.speedX = (Math.random() - 0.5) * 0.4;
-                this.opacity = Math.random() * 0.15 + 0.03;
-                this.symbol = symbols[Math.floor(Math.random() * symbols.length)];
-                this.rotation = Math.random() * 360;
-                this.rotationSpeed = (Math.random() - 0.5) * 0.5;
-                this.wobblePhase = Math.random() * Math.PI * 2;
-                this.wobbleSpeed = Math.random() * 0.02 + 0.005;
-                this.wobbleAmount = Math.random() * 20 + 10;
-            }
-            update() {
-                this.y += this.speedY;
-                this.wobblePhase += this.wobbleSpeed;
-                this.x += this.speedX + Math.sin(this.wobblePhase) * 0.3;
-                this.rotation += this.rotationSpeed;
+                if (p.y - p.size > H) { items[i] = make(true); continue; }
 
-                if (this.y < -this.size) {
-                    this.y = canvas.height + this.size;
-                    this.x = Math.random() * canvas.width;
-                }
-                if (this.x < -this.size) this.x = canvas.width + this.size;
-                if (this.x > canvas.width + this.size) this.x = -this.size;
-            }
-            draw() {
                 ctx.save();
-                ctx.translate(this.x, this.y);
-                ctx.rotate(this.rotation * Math.PI / 180);
-                ctx.globalAlpha = this.opacity;
-                ctx.font = this.size + 'px serif';
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(this.symbol, 0, 0);
+                ctx.globalAlpha = p.alpha;
+                ctx.translate(x, p.y);
+                ctx.rotate(p.rot);
+                ctx.fillStyle = p.color;
+                ctx.strokeStyle = p.color;
+                if (p.kind === 'leaf') drawLeaf(ctx, p.size);
+                else if (p.kind === 'star') drawStar(ctx, p.size);
+                else if (p.kind === 'bird') drawBird(ctx, p.size);
+                else drawBat(ctx, p.size);
                 ctx.restore();
             }
+            requestAnimationFrame(frame);
         }
 
-        // Create particles
-        const particleCount = Math.min(Math.floor(window.innerWidth / 50), 25);
-        for (let i = 0; i < particleCount; i++) {
-            particles.push(new Particle());
+        function seed() {
+            var count = Math.min(Math.round(W / 110), 12);
+            items = [];
+            for (var i = 0; i < count; i++) items.push(make(false));
         }
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            animFrame = requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
+        resize();
+        seed();
+        frame();
 
-        // Cleanup on page hide
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                cancelAnimationFrame(animFrame);
-            } else {
-                animateParticles();
-            }
+        var t;
+        window.addEventListener('resize', function () {
+            clearTimeout(t);
+            t = setTimeout(function () { resize(); seed(); }, 200);
         });
-    }
+    })();
 
-    /* ==========================================
-       9. PARALLAX-LIKE EFFECT for hero
-       ========================================== */
-    const heroIllustration = document.querySelector('.hero__illustration');
-    if (heroIllustration && !('ontouchstart' in window)) {
-        window.addEventListener('scroll', () => {
-            const scrollY = window.scrollY;
-            const offset = scrollY * 0.15;
-            heroIllustration.style.transform = `translate(-50%, -50%) translateY(${-offset}px)`;
-        }, { passive: true });
-    }
-
-    /* ==========================================
-       10. CARD TILT EFFECT on hover
-       ========================================== */
-    const tiltCards = document.querySelectorAll('.info__card');
-    tiltCards.forEach(card => {
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / centerY * -5;
-            const rotateY = (x - centerX) / centerX * 5;
-
-            card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
-        });
-
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'perspective(800px) rotateX(0) rotateY(0) translateY(0)';
-        });
-    });
-
-});
+})();
