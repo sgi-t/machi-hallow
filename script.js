@@ -281,4 +281,45 @@
         });
     })();
 
+    /* --------------------------------------------------------
+       フライヤー ライトボックス
+       -------------------------------------------------------- */
+    (function flyerLightbox() {
+        var flyerCard = document.getElementById('flyer-front-card');
+        if (!flyerCard) return;
+
+        var overlay = document.createElement('div');
+        overlay.className = 'lightbox-overlay';
+        overlay.setAttribute('aria-hidden', 'true');
+        overlay.innerHTML = '<div class="lightbox-inner"><img src="" alt="フライヤー拡大"><button class="lightbox-close" aria-label="閉じる">&times;</button></div>';
+        document.body.appendChild(overlay);
+
+        var img = overlay.querySelector('img');
+        var closeBtn = overlay.querySelector('.lightbox-close');
+
+        function open() {
+            var src = flyerCard.querySelector('img');
+            if (!src) return;
+            img.src = src.src;
+            overlay.classList.add('is-open');
+            overlay.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function close() {
+            overlay.classList.remove('is-open');
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        flyerCard.addEventListener('click', open);
+        closeBtn.addEventListener('click', close);
+        overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) close();
+        });
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && overlay.classList.contains('is-open')) close();
+        });
+    })();
+
 })();
