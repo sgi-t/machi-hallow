@@ -262,9 +262,8 @@ body:not(.is-loading) .bleed { opacity: 1; }
 
 /* ---------- FLYER ---------- */
 .flyer { background: var(--paper-2); }
-.flyer-grid {
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px; max-width: 640px; margin-inline: auto;
+.flyer-single {
+    max-width: 400px; margin-inline: auto;
 }
 .flyer-card {
     background: var(--card); border-radius: 22px; overflow: hidden;
@@ -274,42 +273,217 @@ body:not(.is-loading) .bleed { opacity: 1; }
 }
 .flyer-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(72, 88, 56, .16); }
 .flyer-card img { width: 100%; height: auto; display: block; }
-.flyer-label {
-    padding: 12px 16px; text-align: center;
-    font-size: 13px; font-weight: 700; color: var(--ink-soft);
-    background: var(--paper); border-top: 1.5px dashed var(--dash);
+.flyer-notice {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin-top: 18px; padding: 14px 20px;
+    background: var(--card); border-radius: 14px;
+    border: 1.5px dashed var(--coral);
+    text-align: center;
 }
-.flyer-card--soon { cursor: default; }
-.flyer-card--soon:hover { transform: none; box-shadow: 0 6px 24px rgba(72, 88, 56, .10); }
-.flyer-coming-soon {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 56px 24px; min-height: 320px;
-    background: linear-gradient(160deg, var(--paper) 0%, var(--paper-2) 100%);
+.flyer-notice-icon { width: 24px; height: 24px; flex-shrink: 0; }
+.flyer-notice-text {
+    font-size: 13px; font-weight: 500; color: var(--coral-mid); line-height: 1.7;
 }
-.flyer-coming-icon { width: 56px; height: 56px; margin-bottom: 16px; opacity: .7; }
-.flyer-coming-title {
-    font-size: 17px; font-weight: 700; color: var(--coral-mid);
-    margin-bottom: 6px;
-}
-.flyer-coming-sub { font-size: 13px; color: var(--ink-soft); }
 
 /* ---------- TIMETABLE ---------- */
 .timetable { background: var(--paper); }
-.timetable-wrap {
+
+/* sp-only 改行制御 */
+.sp-only { display: none; }
+
+/* イントロ */
+.tt-intro {
     background: var(--card); border-radius: 22px; padding: 6px;
     box-shadow: 0 6px 20px rgba(72, 88, 56, .10);
+    margin-bottom: 32px;
 }
-.timetable-coming-box {
+.tt-intro__inner {
     border: 1.5px dashed var(--dash); border-radius: 17px;
-    text-align: center; padding: 52px 24px;
+    padding: 30px 24px; text-align: center;
 }
-.timetable-icon { width: 56px; height: 56px; margin: 0 auto 16px; opacity: .7; }
-.timetable-cs-title {
-    font-size: 20px; font-weight: 700; color: var(--coral-mid);
-    margin-bottom: 10px;
+.tt-intro__emoji { font-size: 36px; line-height: 1; margin-bottom: 8px; }
+.tt-intro__title {
+    font-size: 20px; font-weight: 700; color: var(--green);
+    letter-spacing: .06em; margin-bottom: 12px;
 }
-.timetable-cs-sub {
-    font-size: 14px; color: var(--ink-soft); line-height: 2;
+.tt-intro__desc {
+    font-size: 14px; line-height: 2; color: var(--ink-soft);
+}
+
+/* 2カラムレイアウト */
+.tt-layout {
+    display: flex; flex-direction: column; gap: 32px;
+}
+
+/* タイムライン */
+.tt-timeline {
+    position: relative;
+    padding-left: 32px;
+}
+/* 縦線 */
+.tt-timeline::before {
+    content: '';
+    position: absolute; left: 11px; top: 8px; bottom: 8px;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--sage), var(--coral), var(--yellow));
+    border-radius: 2px;
+}
+
+/* 各アイテム */
+.tt-item {
+    position: relative;
+    padding-bottom: 16px;
+}
+.tt-item:last-child { padding-bottom: 0; }
+
+/* ドット */
+.tt-dot {
+    position: absolute; left: -32px; top: 16px;
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--card);
+    border: 2.5px solid var(--sage);
+    z-index: 2;
+    transition: transform .3s var(--ease), border-color .3s;
+}
+.tt-item:hover .tt-dot {
+    transform: scale(1.2);
+    border-color: var(--coral);
+}
+
+/* カード */
+.tt-card {
+    background: var(--card); border-radius: 16px; padding: 16px 18px;
+    box-shadow: 0 4px 16px rgba(72, 88, 56, .08);
+    border-left: 4px solid var(--sage);
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.tt-item:hover .tt-card {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(72, 88, 56, .14);
+}
+
+/* 時間 */
+.tt-time {
+    display: inline-block;
+    font-size: 12px; font-weight: 700; letter-spacing: .08em;
+    color: var(--card); background: var(--sage);
+    padding: 3px 12px; border-radius: 999px;
+    margin-bottom: 6px;
+}
+
+/* プログラム名 */
+.tt-name {
+    font-size: 15px; font-weight: 700; color: var(--green);
+    line-height: 1.5; margin-bottom: 2px;
+}
+
+/* 説明 */
+.tt-desc {
+    font-size: 12px; line-height: 1.8; color: var(--ink-soft);
+}
+
+/* ハイライト（ビンゴ・メインライブ） */
+.tt-item--highlight .tt-card {
+    border-left-color: var(--yellow);
+    background: linear-gradient(135deg, var(--card) 0%, rgba(248, 184, 56, .06) 100%);
+}
+.tt-item--highlight .tt-time { background: var(--yellow); color: var(--ink); }
+.tt-item--highlight .tt-dot { border-color: var(--yellow); }
+
+/* アクセント（入場開始・フィナーレ） */
+.tt-item--accent .tt-card {
+    border-left-color: var(--coral);
+    background: linear-gradient(135deg, var(--card) 0%, rgba(248, 168, 136, .08) 100%);
+}
+.tt-item--accent .tt-time { background: var(--coral); }
+.tt-item--accent .tt-dot { border-color: var(--coral); }
+
+/* 休憩 */
+.tt-item--break .tt-card {
+    border-left-color: var(--dash);
+    background: var(--paper-2);
+    box-shadow: none;
+    border-left-style: dashed;
+}
+.tt-item--break .tt-time {
+    background: var(--paper-2); color: var(--ink-soft);
+    border: 1.5px dashed var(--dash);
+}
+.tt-item--break .tt-dot { border-color: var(--dash); background: var(--paper-2); }
+.tt-item--break .tt-name { color: var(--ink-soft); font-weight: 500; }
+
+/* 注意書き */
+.tt-note {
+    text-align: center; font-size: 12px; color: var(--ink-soft);
+    margin-top: 20px; line-height: 1.8;
+}
+
+/* 第1部/第2部 ラベル */
+.tt-part {
+    margin: 40px 0 20px; text-align: center;
+}
+.tt-part-label {
+    display: inline-block; padding: 6px 18px;
+    background: var(--green); color: #fff; font-weight: 700; font-size: 15px;
+    border-radius: 20px; letter-spacing: 1px;
+}
+
+/* アーティストカードグリッド */
+.tt-artists {
+    display: grid; grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+/* アーティストカード */
+.tt-artist-card {
+    background: var(--card); border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(72, 88, 56, .10);
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    border-top: 5px solid var(--sage);
+}
+.tt-artist-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px rgba(72, 88, 56, .16);
+}
+
+/* カラーバリエーション */
+.tt-artist-card--coral  { border-top-color: var(--coral); }
+.tt-artist-card--blue   { border-top-color: var(--blue); }
+.tt-artist-card--green  { border-top-color: var(--green-2); }
+.tt-artist-card--yellow { border-top-color: var(--yellow); }
+
+/* ヘッダー */
+.tt-artist-header {
+    padding: 14px 14px 8px; text-align: center;
+}
+.tt-artist-name {
+    font-size: 16px; font-weight: 700; color: var(--green);
+    line-height: 1.3; margin-bottom: 2px;
+}
+.tt-artist-en {
+    font-family: var(--font-script); font-size: 14px;
+    color: var(--coral-mid); display: block;
+}
+
+/* 写真 */
+.tt-artist-img {
+    padding: 0 10px; border-radius: 12px; overflow: hidden;
+}
+.tt-artist-img img {
+    width: 100%; height: auto; display: block;
+    border-radius: 10px;
+    aspect-ratio: 3 / 2; object-fit: cover;
+    transition: transform .4s var(--ease);
+}
+.tt-artist-card:hover .tt-artist-img img {
+    transform: scale(1.04);
+}
+
+/* 説明文 */
+.tt-artist-desc {
+    font-size: 12px; line-height: 1.7; color: var(--ink-soft);
+    padding: 10px 14px 16px; text-align: center;
 }
 
 /* ---------- EVENTS ---------- */
@@ -343,6 +517,99 @@ body:not(.is-loading) .bleed { opacity: 1; }
     font-size: 13px; line-height: 1.9; color: var(--ink-soft);
     padding: 0 14px 20px;
 }
+
+/* ---------- カラーハント バナー ---------- */
+.ch-section-top {
+    background: var(--paper);
+    padding: 40px 0 0;
+    position: relative;
+    z-index: 10;
+}
+.ch-section-mid {
+    background: var(--paper);
+    padding: 46px 0 0;
+    position: relative;
+    z-index: 10;
+}
+
+.ch-banner {
+    display: block;
+    background: var(--card);
+    border-radius: 22px;
+    padding: 8px;
+    box-shadow: 0 6px 20px rgba(72, 88, 56, .10);
+    transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    overflow: hidden;
+}
+.ch-banner:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(72, 88, 56, .16);
+    color: inherit;
+}
+.ch-banner__in {
+    border: 2px dashed var(--coral);
+    border-radius: 17px;
+    padding: 28px 20px;
+    background: linear-gradient(135deg, rgba(253, 251, 247, 0) 0%, rgba(248, 168, 136, 0.08) 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.ch-banner__catch {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--coral-mid);
+    letter-spacing: .08em;
+    margin-bottom: 6px;
+    position: relative; z-index: 2;
+}
+.ch-banner__title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--green);
+    letter-spacing: .08em;
+    margin-bottom: 12px;
+    position: relative; z-index: 2;
+    line-height: 1.2;
+}
+.ch-banner__title small {
+    font-size: 16px;
+    margin-left: 6px;
+}
+.ch-banner__desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--ink);
+    margin-bottom: 22px;
+    position: relative; z-index: 2;
+    font-weight: 500;
+}
+.ch-banner__btn {
+    pointer-events: none;
+    position: relative; z-index: 2;
+}
+.ch-banner__btn svg {
+    width: 18px; height: 18px;
+}
+.ch-banner__deco {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+}
+.ch-dot {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.15;
+}
+.ch-dot--red { width: 140px; height: 140px; background: #FF7E7E; top: -40px; left: -40px; }
+.ch-dot--blue { width: 100px; height: 100px; background: var(--blue); bottom: -20px; right: 10%; }
+.ch-dot--yellow { width: 80px; height: 80px; background: var(--yellow); top: 20px; right: -20px; }
 
 /* ---------- FAQ ---------- */
 .faq { background: var(--paper); }
@@ -463,7 +730,30 @@ body:not(.is-loading) .bleed { opacity: 1; }
     .event-card { width: calc(50% - 10px); }
     .event-card h3 { font-size: 17px; }
     .event-desc { font-size: 14px; }
-    .timetable-cs-title { font-size: 22px; }
+    .tt-intro__title { font-size: 22px; }
+    .tt-intro__desc { font-size: 15px; }
+    .tt-layout { flex-direction: row; gap: 36px; align-items: flex-start; }
+    .tt-left { flex: 1.6; min-width: 0; }
+    .tt-right { flex: 1; min-width: 0; }
+    .tt-timeline { padding-left: 34px; }
+    .tt-timeline::before { left: 12px; }
+    .tt-dot { left: -34px; }
+    .tt-name { font-size: 14px; }
+    .tt-desc { font-size: 12px; }
+    .tt-time { font-size: 11px; }
+    .tt-card { padding: 14px 16px; }
+    .tt-item { padding-bottom: 12px; }
+    .tt-artist-name { font-size: 15px; }
+    .tt-artist-desc { font-size: 11px; }
+    .tt-artists { gap: 14px; }
+    
+    .ch-section-top { padding: 60px 0 0; }
+    .ch-section-mid { padding: 60px 0 0; }
+    .ch-banner__in { padding: 36px 24px; }
+    .ch-banner__catch { font-size: 14px; }
+    .ch-banner__title { font-size: 32px; }
+    .ch-banner__title small { font-size: 18px; }
+    .ch-banner__desc { font-size: 15px; }
 }
 
 /* ============================================================
@@ -537,9 +827,25 @@ body:not(.is-loading) .bleed { opacity: 1; }
     .event-card h3 { font-size: 18px; }
     .event-desc { font-size: 14px; }
     .event-svg svg { width: 64px; height: 64px; }
-    .timetable-coming-box { padding: 72px 32px; }
-    .timetable-cs-title { font-size: 24px; }
-    .timetable-cs-sub { font-size: 15px; }
+    .timetable .wrap { max-width: 1100px; }
+    .tt-intro__inner { padding: 40px 36px; }
+    .tt-intro__title { font-size: 26px; }
+    .tt-intro__desc { font-size: 16px; }
+    .tt-layout { gap: 36px; }
+    .tt-timeline { padding-left: 40px; }
+    .tt-timeline::before { left: 14px; }
+    .tt-dot { left: -40px; width: 24px; height: 24px; }
+    .tt-card { padding: 46px 32px; }
+    .tt-item { padding-bottom: 36px; }
+    .tt-name { font-size: 16px; }
+    .tt-desc { font-size: 13px; margin-top: 10px; }
+    .tt-time { font-size: 12px; padding: 4px 14px; }
+    .tt-note { font-size: 13px; }
+    .tt-artist-name { font-size: 17px; }
+    .tt-artist-en { font-size: 15px; }
+    .tt-artist-desc { font-size: 12px; padding: 12px 16px 18px; }
+    .tt-artist-header { padding: 16px 16px 10px; }
+    .tt-artists { gap: 18px; }
 }
 
 /* ============================================================
